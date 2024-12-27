@@ -7,8 +7,8 @@ from collections import defaultdict
 # Users to be filtered out
 excluded_users = ["TheWorldPost24", "AutoModerator", "SaveVideo", "Flair_Helper", "savevideobot", "redditspeedbot", "haikusbot", "sneakpeekbot", "WikiSummarizerBot", "ModeratelyHelpfulBot", "RedditMP4Bot", "RemindMeBot", "stabbot", "SomaliNotSomalianbot", "AmputatorBot", "twitterStatus_Bot", "songfinderbot", "RepostSleuthBot", "WikiMobileLinkBot", "TrendingBot", "LuckyNumber-Bot"]
 # Directories - Haven't got github on my end yet, please fix if broken
-GeoComs = "data/geopolotics/geopolitics_comments.ndjson"
-GeoSubs = "data/geopolotics/geopolitics_submissions.ndjson"
+GeoComs = "data/geopolitics/geopolitics_comments.ndjson"
+GeoSubs = "data/geopolitics/geopolitics_submissions.ndjson"
 GeoOut = "data/geopolitics_parent_child.csv"
 
 CombatComs = "data/combatfootage/combatfootage_comments.ndjson"
@@ -29,6 +29,7 @@ def process_reddit_data(comments_file, submissions_file, output_file, excluded_u
     # Load submissions and comments
     submissions = []
     comments = []
+    error_lines = []
 
     print("Parsing submissions...")
     # Parse submissions
@@ -42,7 +43,7 @@ def process_reddit_data(comments_file, submissions_file, output_file, excluded_u
                 if submission.get("author") not in excluded_users and submission.get("selftext") not in [None, "[deleted]", "[removed]"]:
                     submissions.append(submission)
             except json.JSONDecodeError:
-                continue
+                error_lines.append(line)
             print_progress(i, total_lines, "Parsing Submissions")
 
     print("\nParsing comments...")
@@ -135,6 +136,15 @@ def process_reddit_data(comments_file, submissions_file, output_file, excluded_u
     df.to_csv(output_file, index=False)
     print(f"Data saved to {output_file}")
 
+    return error_lines
+
 # Badabing Badaboom
-process_reddit_data(GeoComs, GeoSubs, GeoOut, excluded_users)
-process_reddit_data(CombatComs, CombatSubs, CombatOut, excluded_users)
+geo_error_lines = process_reddit_data(GeoComs, GeoSubs, GeoOut, excluded_users)
+combat_error_lines = process_reddit_data(CombatComs, CombatSubs, CombatOut, excluded_users)
+
+# the next line makes me want to drink one million beers
+for lines, subname in [(geo_error_lines, "geopolitics"), (combat_error_lines, "combatfootage")]:
+    if len(errors) > 0:
+        print(f"Error reading JSON data in {subname} file. Lines with errors:")
+        for line in lines:
+            print(line)
