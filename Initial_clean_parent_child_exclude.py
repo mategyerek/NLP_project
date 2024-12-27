@@ -58,7 +58,7 @@ def process_reddit_data(comments_file, submissions_file, output_file, excluded_u
                 if comment.get("author") not in excluded_users and comment.get("body") not in [None, "[deleted]", "[removed]"]:
                     comments.append(comment)
             except json.JSONDecodeError:
-                continue
+                error_lines.append(line)
             print_progress(i, total_lines, "Parsing Comments")
 
     print("\nProcessing data...")
@@ -144,7 +144,7 @@ combat_error_lines = process_reddit_data(CombatComs, CombatSubs, CombatOut, excl
 
 # the next line makes me want to drink one million beers
 for lines, subname in [(geo_error_lines, "geopolitics"), (combat_error_lines, "combatfootage")]:
-    if len(errors) > 0:
+    if len(lines) > 0:
         print(f"Error reading JSON data in {subname} file. Lines with errors:")
         for line in lines:
             print(line)
