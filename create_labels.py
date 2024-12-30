@@ -75,8 +75,8 @@ if __name__ == "__main__":
             while selected_option not in LABELS:
                 selected_option = input("Select a valid option [{'/'.join(LABELS.keys())}]: ").lower()
             labeler.setLabel(LABELS[selected_option])
-    # except Exception as e:
-    #    print(e)
+    except KeyboardInterrupt:
+        pass
     finally:
         save_or_not = input("\nSave file? [Y/n]: ")
         if len(save_or_not) > 0 and save_or_not[0].lower() == "n":
