@@ -25,14 +25,13 @@ def group_by_author_and_write(posts: pd.DataFrame, file_descriptor):
     for i, post in posts.iterrows():
         author = post["Author"]
         if author in users:
-            users[author].append(post["Post ID"])
+            users[author].append(post.to_dict())
         else:
-            users[author] = [post["Post ID"]]
+            users[author] = [post.to_dict()]
         print_progress(i, num_posts) 
     
     print("Writing to file\n")
     num_users = len(users)
-    posts.set_index("Post ID", inplace=True)
     for i, (user, user_posts) in enumerate(users.items()):
         json.dump({
             "username": user,
