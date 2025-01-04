@@ -1,1 +1,3 @@
 data/*
+!data/cf_by_user.ndjson
+!data/geo_by_user.ndjson
