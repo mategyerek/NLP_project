@@ -29,7 +29,7 @@ for line in source_f:
             "model": "gpt-3.5", #TODO placeholder
             "messages": [
                 {"role": "system", "content": "classify this"}, #TODO placeholder
-                {"role": "user", "content": "\n---\n".join(posts)}
+                {"role": "user", "content": "\n---\n".join([ str(post["Text"]) for post in posts ])}
             ],
             "max_tokens": 100 #TODO placeholder
         }
@@ -39,8 +39,9 @@ for line in source_f:
         dest_f.close()
         dest_f = open(path.join(data_dir, f"openai_batch{dest_n}.ndjson", "wb"))
         dest_n += 1
-
-    dest_f.write("\n")
+    
+    dest_f.write(job_json)
+    dest_f.write(b"\n")
 
 dest_f.close()
 
