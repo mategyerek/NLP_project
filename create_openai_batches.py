@@ -16,7 +16,7 @@ dest_f = open(path.join(data_dir, "openai_batch0.ndjson"), "wb")
 
 
 for line in source_f:
-    print("line:", line)
+    # print("line:", line)
     user_data = json.loads(line)
     username = user_data["username"]
     posts = user_data["posts"]
@@ -37,7 +37,7 @@ for line in source_f:
     job_json = bytes(json.dumps(job), "ascii")
     if len(job_json) + dest_f.tell() > 180000000:
         dest_f.close()
-        dest_f = open(path.join(data_dir, f"openai_batch{dest_n}.ndjson", "wb"))
+        dest_f = open(path.join(data_dir, f"openai_batch{dest_n}.ndjson"), "wb") 
         dest_n += 1
     
     dest_f.write(job_json)
