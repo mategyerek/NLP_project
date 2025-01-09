@@ -1,9 +1,11 @@
-from transformers import pipeline
+from transformers import pipeline, AutoTokenizer
 
 import pandas
 # Create a pipeline for sentiment analysis
+model_name = "distilbert-base-uncased-finetuned-sst-2-english"
+tokenizer = AutoTokenizer.from_pretrained(model_name, model_max_length=512)
 classifier = pipeline("sentiment-analysis",
-                      model="distilbert-base-uncased-finetuned-sst-2-english", device=0)
+                      model=model_name, device=0, tokenizer=tokenizer)
 #cardiffnlp/twitter-roberta-base-sentiment-latest
 #distilbert-base-uncased-finetuned-sst-2-english
 #infile = "geopolitics"
@@ -18,11 +20,10 @@ df = pandas.read_csv(f"./data/filtered_{infile}.csv")
 
 upvotes_list = df["Upvotes"][0:limit]
 text_list = df["Text"].tolist()[0:limit]
-trunc_list = []
-for entry in text_list:
-    trunc_list.append(str(entry)[0:800])
+#token_batch = tokenizer(text_list, max_length=512)
+#token_list = [ token_batch.tokens(i) for i in range(len(text_list)) ]
 # Analyze text
-result = classifier(trunc_list, batch_size=1280)
+result = classifier(text_list, batch_size=1280)
 print(result)
 
 """
