@@ -1,21 +1,22 @@
 from transformers import pipeline
+
 import pandas
 # Create a pipeline for sentiment analysis
 classifier = pipeline("sentiment-analysis",
-                      model="distilbert-base-uncased-finetuned-sst-2-english", device=-1)
-
-limit = 100000000
+                      model="distilbert-base-uncased-finetuned-sst-2-english", device=0)
+#cardiffnlp/twitter-roberta-base-sentiment-latest
+#distilbert-base-uncased-finetuned-sst-2-english
+#infile = "geopolitics"
 infile = "geopolitics"
+df = pandas.read_csv(f"./data/filtered_{infile}.csv")
 
-df = pandas.read_csv(f"./data/{infile}_parent_child.csv")
-
-upvotes_list = df["Upvotes"][0:limit]
-text_list = df["Text"].tolist()[0:limit]
+upvotes_list = df["Upvotes"]
+text_list = df["Text"].tolist()
 trunc_list = []
 for entry in text_list:
-    trunc_list.append(entry[0:512])
+    trunc_list.append(str(entry)[0:800])
 # Analyze text
-result = classifier(trunc_list)
+result = classifier(trunc_list, batch_size=128)
 print(result)
 
 """
