@@ -22,5 +22,5 @@ python group_by_user.py
 
 The data will be written to `data/geo_by_user.ndjson` and `data/cf_by_user.ndjson`
 
-## Labeling
-Creating labels for the data can be done using the `create_labels.py` script, which will prompt you to manually define a label for each user. For more info see the source code.
+Then run `NER_filter.py` in order to obtain only the posts relevatn to the Russia-Ukraine conflict, which will be written to `data/filtered_combatfootage.csv`
+
