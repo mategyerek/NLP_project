@@ -44,6 +44,6 @@ def plot_positive_percentage(dataset1_path, dataset2_path):
     plt.show()
 
 # Example usage
-dataset1_path = 'results_geopolitics.csv'  # Replace with actual file path
-dataset2_path = 'results_combatfootage.csv'  # Replace with actual file path
+dataset1_path = './data/results_geopolitics.csv'  # Replace with actual file path
+dataset2_path = './data/results_combatfootage.csv'  # Replace with actual file path
 plot_positive_percentage(dataset1_path, dataset2_path)

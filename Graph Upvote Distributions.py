@@ -5,7 +5,7 @@ import seaborn as sns
 from matplotlib.ticker import FuncFormatter
 
 # Load the dataset
-file_path = 'results_combatfootage.csv'
+file_path = './data/results_combatfootage.csv'
 data = pd.read_csv(file_path)
 
 # Rename columns for consistency
